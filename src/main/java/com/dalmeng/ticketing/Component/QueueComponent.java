@@ -11,7 +11,25 @@ import java.util.Queue;
 @Component
 public class QueueComponent {
 
+    private static int succeedCount = 0;
+    private static final int batchSize = 8;
+    private static final int totalSucceedCount = 57;
     private static final Queue<Long> queue = new LinkedList<>();
+
+    public synchronized int getSucceedCount(){
+        return succeedCount;
+    }
+
+    public int getTotalSucceedCount(){
+        return totalSucceedCount;
+    }
+    public synchronized void addSucceedCount(int cnt){
+        succeedCount += cnt;
+    }
+
+    public int getBatchSize(){
+        return batchSize;
+    }
 
     public boolean addRequest(Long userId){
         try{

@@ -1,6 +1,7 @@
 package com.dalmeng.ticketing.Scheduler;
 
 import com.dalmeng.ticketing.Component.QueueComponent;
+import com.dalmeng.ticketing.Service.TicketingService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -14,6 +15,7 @@ import java.util.List;
 public class TicketingProcessingScheduler {
 
     private final QueueComponent queueComponent;
+    private final TicketingService ticketingService;
 
     @Scheduled(cron = "0/5 * * * * ?")
     public void processingTicketing(){
@@ -33,11 +35,14 @@ public class TicketingProcessingScheduler {
 
             String temp = "Succeed User Id = [";
 
+            ticketingService.saveAll(requests.subList(0, processCount));
+
+
             for(int i = 0; i < processCount; i++){
                 if(i < processCount - 1) temp += String.format("%d, ", requests.get(i));
                 else temp += String.format("%d]", requests.get(i));
             }
-            log.info(temp);
+
 
             // 티켓팅에 성공한 사람 수를 더해준다.
             queueComponent.addSucceedCount(processCount);
